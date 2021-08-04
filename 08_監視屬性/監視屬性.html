@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>監視屬性</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>今天天氣很{{ weather }}</h1>
+      <button @click="showWeather">Click</button>
+      <br />
+      <button @click="number.a++">點我加a</button><span>{{ number.a }}</span>
+      <button @click="number.b++">點我加b</button><span>{{ number.b }}</span>
+    </div>
+    <script>
+      const app = Vue.createApp({
+        data() {
+          return {
+            isHot: true,
+            number: {
+              a: 1,
+              b: 2,
+            },
+          };
+        },
+        computed: {
+          weather() {
+            return this.isHot ? "炎熱" : "涼爽";
+          },
+        },
+        methods: {
+          showWeather() {
+            this.isHot = !this.isHot;
+          },
+        },
+        watch: {
+          firstName: function (val) {
+            setTimeout(() => {
+              this.fullName = val + " " + this.lastName;
+            }, 1000);
+          },
+          weather: {
+            immediate: true, // 在初始化時就調用handler
+
+            handler(newValue, oldValue) {
+              console.log("weather被修改", newValue, oldValue);
+            },
+          },
+          // 深度監視 Vue的watch屬性 默認只能監視屬性的一個層級 當屬性值為多層則監視不到
+          // 為啥會有層級問題這是因為 obj是存址 今天obj內的屬性值被改了他址不會變 除非你是重新傳一個新的obj給他他址才會變， 所以當是內層的屬性改變時watch屬性是不能發現的
+          number: {
+            // 添加deep屬性後就能深層監視 預設為false是為了效能
+            deep: true,
+            handler() {
+              console.log("number被改變了");
+            },
+          },
+
+          number() {
+            console.log("number被改變了");
+          },
+          // 想要監測內部單一值的寫法
+          // 為啥是"number.a"這種寫法是因為其實key的寫法本來就是字串址是我們簡化寫法 在寫key值時都度加引號
+          "number.a": {
+            handler() {
+              console.log("number.a的值改變了");
+            },
+          },
+        },
+      });
+
+      app.mount("#app");
+    </script>
+  </body>
+</html>
