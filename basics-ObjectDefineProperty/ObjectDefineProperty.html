@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>學習數據代理</title>
+  </head>
+  <body>
+    <script>
+      // 最基礎的定義obj屬性方法
+      let number = 18;
+      let person = {
+        name: "張三",
+        sex: "男",
+        // age: number,
+      };
+      // 定義屬性的高級方法(為啥說高級 因為這方法能設置option)
+      // Object.defineProperty(要定義的對象obj, 要定義的屬性, option)
+      Object.defineProperty(person, "age", {
+        // value: 18,
+        enumerable: true, // enumerable = 可列舉的 控制屬性是否可遍歷 預設為false
+        // writable: true, // 控制屬性是否能被修改
+        configurable: true, //控制屬性是否能被刪除 預設為false
+
+        // 當有人讀取person的age屬性時，就會調用get函數(getter)，且getter的返回值就是age的值
+        get() {
+          return number;
+        },
+
+        // 當有人修改person的age屬性時，setter就會被調用，且會收到修改的具體值
+        set(value) {
+          number = value;
+        },
+      });
+
+      number = 19;
+      console.log(person);
+    </script>
+  </body>
+</html>
