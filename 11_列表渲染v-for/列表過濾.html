@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>人員清單</h1>
+      <label
+        >搜尋欄
+        <input type="text" v-model="value" />
+      </label>
+      <ul>
+        <!-- 過濾邏輯: 先拿到輸入框的值，然後又這個值跟原資料做比對，然後在秀出比對後的資料(我們不希望動到原先的資料，因為每次比對都是跟原先的資料比，所以我們用computed另新增屬性) -->
+        <li v-for="(p, index) in newPeople" :key="p.id">
+          {{ p.name}} - {{ p.age }}
+        </li>
+      </ul>
+      <br />
+      <!-- 不用想太複雜 我們只要另設一個值 這個值會決定要怎麼\排就好 -->
+      <button @click="sortMethod=2">遞升</button>
+      <button @click="sortMethod=1">遞降</button>
+      <button @click="sortMethod=0">原序</button>
+    </div>
+
+    <script>
+      const app = Vue.createApp({
+        data() {
+          return {
+            value: "",
+            sortMethod: 0,
+            people: [
+              { id: 01, name: "藤原千花", age: 18 },
+              { id: 02, name: "白銀御行", age: 18 },
+              { id: 03, name: "石上", age: 17 },
+              { id: 04, name: "白銀圭", age: 14 },
+            ],
+          };
+        },
+        computed: {
+          // 字串內必定包空字串，所以第一次初始化時的比對就會把所有資料列出來
+          newPeople() {
+            const arr = this.people.filter((p) => {
+              return p.name.includes(this.value);
+            });
+
+            if (this.sortMethod) {
+              this.sortMethod === 2
+                ? arr.sort((a, b) => a.age - b.age)
+                : arr.sort((a, b) => b.age - a.age);
+            }
+
+            return arr;
+          },
+        },
+        methods: {
+          addOne() {
+            this.people.unshift({
+              id: 05,
+              name: "御子",
+              age: 17,
+            });
+          },
+        },
+      });
+
+      app.mount("#app");
+    </script>
+  </body>
+</html>

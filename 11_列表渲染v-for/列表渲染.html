@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body id="app">
+    <h1>人員清單</h1>
+    <ul>
+      <!-- 如果今天列表渲染的key用index的話當資料的改變是會造成index的順序崩壞時，就會出現問題。 -->
+      <!-- 譬如新增的資料都是往陣列的第0 index插入，就會造成之前的資料的index全都要+1， 這時候舊的虛擬dom跟新的虛擬dom的比對(以index比對)就會出錯 -->
+      <li v-for="(p, index) in people" :key="p.id">
+        {{ p.name}} - {{ p.age }}
+        <input type="text" />
+      </li>
+    </ul>
+    <button @click="addOne">添加一個小狂犬</button>
+    <script>
+      const app = Vue.createApp({
+        data() {
+          return {
+            people: [
+              { id: 01, name: "藤原千花", age: 18 },
+              { id: 02, name: "白銀御行", age: 18 },
+              { id: 03, name: "石上", age: 17 },
+              { id: 04, name: "白銀圭", age: 14 },
+            ],
+          };
+        },
+        methods: {
+          addOne() {
+            this.people.unshift({
+              id: 05,
+              name: "御子",
+              age: 17,
+            });
+          },
+        },
+      });
+
+      app.mount("#app");
+    </script>
+  </body>
+</html>
