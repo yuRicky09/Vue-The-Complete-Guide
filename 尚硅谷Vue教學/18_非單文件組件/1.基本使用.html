@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <school></school>
+      <hr />
+      <student></student>
+      <hr />
+      <student></student>
+      <hr />
+      <hello></hello>
+    </div>
+    <script>
+      // 創建組件
+      const school = Vue.extend({
+        // 1.組件就是一塊磚，哪裡使用哪裡搬。不需要指定容器，組件的服務對象由Vue new出來的實體(app大哥)決定。
+        // 2.組件的data屬性值必須是fn且return值為一object。這是因為如果是用值為obj的寫法的話當此組件被複用且obj的值被改時所有使用此組件的值都會一起被改(因指向的都是同一個data obj)。 但是當使用fn寫法且return obj時，就但表說使用時都會return一個新的obj只是key value都配一樣不會互相影響!
+        data() {
+          return {
+            school: "新店高中",
+            address: "新店大安路",
+          };
+        },
+        template: `
+          <div>
+            <h2>{{ school }}</h2>
+            <h2>{{ address }}</h2>
+            <button @click='showSchoolName'>點我顯示學校名</button>
+          </div>
+        `,
+        methods: {
+          showSchoolName() {
+            alert(this.school);
+          },
+        },
+      });
+
+      const student = Vue.extend({
+        data() {
+          return {
+            name: "御",
+            sex: "男",
+            age: 18,
+          };
+        },
+        template: `
+          <div>
+            <h2>{{ name }}</h2>  
+            <h2>{{ sex }}</h2>  
+            <h2>{{ age }}</h2>  
+          </div>
+        `,
+      });
+
+      const hello = Vue.extend({
+        template: `
+          <h1>Hello</h1>
+        `,
+      });
+
+      // 全局註冊組件
+      Vue.component("hello", hello);
+
+      const app = new Vue({
+        data() {
+          return {};
+        },
+        // 註冊組件(局部創建)
+        components: {
+          school,
+          student,
+        },
+        methods: {},
+      });
+
+      app.$mount("#app");
+    </script>
+  </body>
+</html>
