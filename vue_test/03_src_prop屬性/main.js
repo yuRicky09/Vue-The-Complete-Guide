@@ -3,10 +3,6 @@ import App from "./App.vue";
 
 Vue.config.productionTip = false;
 
-import plugins from "./plugins";
-
-Vue.use(plugins);
-
 const vm = new Vue({
   components: {
     App,
@@ -14,5 +10,4 @@ const vm = new Vue({
 
   render: (h) => h(App),
 });
-
 vm.$mount("#app");

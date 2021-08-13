@@ -1,17 +1,23 @@
 <template>
   <div>
-    <!-- 記得用v-bind，這樣被綁定的屬性值才會適用JS表達式來判別而非字串 -->
-    <Student :age="18" sex="男性"></Student>
+    <Student></Student>
+    <br />
+    <School></School>
   </div>
 </template>
 
 <script>
 import Student from "./components/Student.vue";
+import School from "./components/School.vue";
+console.log(Student);
+console.log(School);
 export default {
+  name: "App",
   components: {
     Student,
+    School,
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style></style>
