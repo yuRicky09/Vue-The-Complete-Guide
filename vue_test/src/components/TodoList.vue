@@ -1,7 +1,13 @@
 <template>
   <div>
     <ul class="todo-main">
-      <TodoItem v-for="todo in todos" :key="todo.id" :todo="todo"></TodoItem>
+      <TodoItem
+        v-for="todo in todos"
+        :key="todo.id"
+        :todo="todo"
+        :changeTodoStatus="changeTodoStatus"
+        :removeTodoData="removeTodoData"
+      ></TodoItem>
     </ul>
   </div>
 </template>
@@ -16,7 +22,7 @@ export default {
   data() {
     return {};
   },
-  props: ["todos"],
+  props: ["todos", "changeTodoStatus", "removeTodoData"],
 };
 </script>
 

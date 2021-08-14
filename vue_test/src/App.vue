@@ -3,8 +3,16 @@
     <div class="todo-container">
       <div class="todo-wrap">
         <TodoHeader :addTodo="addTodo"></TodoHeader>
-        <TodoList :todos="todos"></TodoList>
-        <TodoFooter></TodoFooter>
+        <TodoList
+          :todos="todos"
+          :changeTodoStatus="changeTodoStatus"
+          :removeTodoData="removeTodoData"
+        ></TodoList>
+        <TodoFooter
+          :todos="todos"
+          :toggleAllDone="toggleAllDone"
+          :clearAllDoneData="clearAllDoneData"
+        ></TodoFooter>
       </div>
     </div>
   </div>
@@ -42,6 +50,22 @@ export default {
         done: false,
       };
       this.todos.unshift(todoObj);
+    },
+    changeTodoStatus(id) {
+      this.todos.forEach((todo) => {
+        if (id === todo.id) {
+          todo.done = !todo.done;
+        }
+      });
+    },
+    removeTodoData(id) {
+      this.todos = this.todos.filter((todo) => todo.id !== id);
+    },
+    clearAllDoneData() {
+      this.todos = this.todos.filter((todo) => !todo.done);
+    },
+    toggleAllDone(done) {
+      this.todos.forEach((todo) => (todo.done = done));
     },
   },
 };
