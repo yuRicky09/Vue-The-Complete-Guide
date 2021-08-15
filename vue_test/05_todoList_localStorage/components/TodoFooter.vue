@@ -17,7 +17,7 @@
 <script>
 export default {
   name: "TodoFooter",
-  props: ["todos"],
+  props: ["todos", "toggleAllDone", "clearAllDoneData"],
   computed: {
     todoTotal() {
       return this.todos.length;
@@ -40,7 +40,7 @@ export default {
         return this.todoTotal === this.doneTotal;
       },
       set(value) {
-        this.$emit("toggleAllDone", value);
+        this.toggleAllDone(value);
       },
     },
   },
@@ -50,7 +50,7 @@ export default {
         alert("沒有可刪除的事項");
       } else {
         if (confirm("確定要刪除所有已完成事項嗎?")) {
-          this.$emit("clearAllDoneData");
+          this.clearAllDoneData();
         }
       }
     },

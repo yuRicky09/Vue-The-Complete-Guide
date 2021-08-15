@@ -2,7 +2,7 @@
   <div>
     <div class="todo-container">
       <div class="todo-wrap">
-        <TodoHeader @addTodo="addTodo"></TodoHeader>
+        <TodoHeader :addTodo="addTodo"></TodoHeader>
         <TodoList
           :todos="todos"
           :changeTodoStatus="changeTodoStatus"
@@ -10,8 +10,8 @@
         ></TodoList>
         <TodoFooter
           :todos="todos"
-          @toggleAllDone="toggleAllDone"
-          @clearAllDoneData="clearAllDoneData"
+          :toggleAllDone="toggleAllDone"
+          :clearAllDoneData="clearAllDoneData"
         ></TodoFooter>
       </div>
     </div>

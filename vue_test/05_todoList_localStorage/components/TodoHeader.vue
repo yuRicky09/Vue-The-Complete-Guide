@@ -23,11 +23,12 @@ export default {
       if (!this.enteredValue.trim()) {
         alert("輸入值不得為空");
       } else {
-        this.$emit("addTodo", this.enteredValue);
+        this.addTodo(this.enteredValue);
         this.enteredValue = "";
       }
     },
   },
+  props: ["addTodo"],
 };
 </script>
 
