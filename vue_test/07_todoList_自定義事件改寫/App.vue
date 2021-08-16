@@ -3,7 +3,11 @@
     <div class="todo-container">
       <div class="todo-wrap">
         <TodoHeader @addTodo="addTodo"></TodoHeader>
-        <TodoList :todos="todos"></TodoList>
+        <TodoList
+          :todos="todos"
+          :changeTodoStatus="changeTodoStatus"
+          :removeTodoData="removeTodoData"
+        ></TodoList>
         <TodoFooter
           :todos="todos"
           @toggleAllDone="toggleAllDone"
@@ -73,10 +77,6 @@ export default {
     toggleAllDone(done) {
       this.todos.forEach((todo) => (todo.done = done));
     },
-  },
-  mounted() {
-    this.$bus.$on("changeTodoStatus", this.changeTodoStatus);
-    this.$bus.$on("removeTodoData", this.removeTodoData);
   },
 };
 </script>

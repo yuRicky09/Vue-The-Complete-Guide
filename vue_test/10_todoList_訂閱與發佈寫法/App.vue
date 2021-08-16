@@ -17,6 +17,7 @@
 <script>
 //* 一個簡易的產生id套件
 import { nanoid } from "nanoid";
+import PubSub from "pubsub-js";
 
 import TodoHeader from "./components/TodoHeader";
 import TodoFooter from "./components/TodoFooter";
@@ -57,14 +58,14 @@ export default {
       };
       this.todos.unshift(todoObj);
     },
-    changeTodoStatus(id) {
+    changeTodoStatus(_, id) {
       this.todos.forEach((todo) => {
         if (id === todo.id) {
           todo.done = !todo.done;
         }
       });
     },
-    removeTodoData(id) {
+    removeTodoData(_, id) {
       this.todos = this.todos.filter((todo) => todo.id !== id);
     },
     clearAllDoneData() {
@@ -75,8 +76,16 @@ export default {
     },
   },
   mounted() {
-    this.$bus.$on("changeTodoStatus", this.changeTodoStatus);
-    this.$bus.$on("removeTodoData", this.removeTodoData);
+    // this.$bus.$on("changeTodoStatus", this.changeTodoStatus);
+    this.pubId = PubSub.subscribe("changeTodoStatus", this.changeTodoStatus);
+
+    // this.$bus.$on("removeTodoData", this.removeTodoData);
+    this.pubId2 = PubSub.subscribe("removeTodoData", this.removeTodoData);
+  },
+
+  beforeDestroy() {
+    PunSub.unsubscribe(pubId);
+    PunSub.unsubscribe(pubId2);
   },
 };
 </script>

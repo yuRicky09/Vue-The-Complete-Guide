@@ -8,10 +8,6 @@ const vm = new Vue({
     App,
   },
 
-  beforeCreate() {
-    Vue.prototype.$bus = this;
-  },
-
   render: (h) => h(App),
 });
 
