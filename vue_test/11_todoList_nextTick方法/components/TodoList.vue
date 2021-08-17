@@ -1,9 +1,7 @@
 <template>
   <div>
     <ul class="todo-main">
-      <transition-group name="todo-transition">
-        <TodoItem v-for="todo in todos" :key="todo.id" :todo="todo"></TodoItem>
-      </transition-group>
+      <TodoItem v-for="todo in todos" :key="todo.id" :todo="todo"></TodoItem>
     </ul>
   </div>
 </template>
@@ -37,24 +35,5 @@ export default {
   border-radius: 2px;
   padding-left: 5px;
   margin-top: 10px;
-}
-
-.todo-transition-enter-active {
-  animation: titleAnimation 0.5s linear;
-}
-
-.todo-transition-leave-active {
-  animation: titleAnimation 0.5s linear reverse;
-}
-
-@keyframes titleAnimation {
-  from {
-    transform: translateX(10%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
 }
 </style>
