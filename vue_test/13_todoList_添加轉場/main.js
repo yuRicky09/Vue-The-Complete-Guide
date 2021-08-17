@@ -7,6 +7,11 @@ const vm = new Vue({
   components: {
     App,
   },
+
+  beforeCreate() {
+    Vue.prototype.$bus = this;
+  },
+
   render: (h) => h(App),
 });
 

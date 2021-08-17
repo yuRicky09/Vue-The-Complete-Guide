@@ -1,0 +1,14 @@
+{
+  "name": "vue-proxy-server",
+  "version": "1.0.0",
+  "description": "proxy server",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "Yu",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

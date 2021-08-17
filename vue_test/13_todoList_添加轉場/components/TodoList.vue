@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul class="todo-main">
-      <transition-group name="todo-transition">
+      <transition-group name="todo-transition" appear>
         <TodoItem v-for="todo in todos" :key="todo.id" :todo="todo"></TodoItem>
       </transition-group>
     </ul>
