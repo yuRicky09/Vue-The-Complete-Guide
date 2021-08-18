@@ -22,15 +22,31 @@ export default {
   },
   methods: {
     searchUserInfo() {
+      // 按下搜尋後
+      this.$bus.$emit("getUserInfo", {
+        init: false,
+        isSeraching: true,
+        errorMessage: "",
+        users: [],
+      });
       axios
         .get(`https://api.github.com/search/users?q=${this.searchValue}`)
         .then(
           (res) => {
             // console.log("收到請求了", res.data);
-            this.$bus.$emit("getUserInfo", res.data.items);
+            this.$bus.$emit("getUserInfo", {
+              isSeraching: false,
+              errorMessage: "",
+              users: res.data.items,
+            });
           },
           (error) => {
             console.log("請求失敗", error.message);
+            this.$bus.$emit("getUserInfo", {
+              isSeraching: false,
+              errorMessage: error.message,
+              users: [],
+            });
           }
         );
     },
