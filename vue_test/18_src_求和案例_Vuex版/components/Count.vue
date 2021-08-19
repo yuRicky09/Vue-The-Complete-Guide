@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>下方組件之人數數量為:{{ personList.length }}</h1>
     <!-- 模板能直接拿到所有掛在於實體上的東西 -->
     <h1>計算之和為{{ sum }}</h1>
     <h1>計算之和的10倍為{{ multiplySum }}</h1>
@@ -27,29 +26,43 @@ export default {
       selectedNumber: 1,
     };
   },
+  //* 如果不用Vuex的工具，又想讓模板使用共享數據時能寫得更簡單的話就只能透過computed來幫忙
   computed: {
+    // sum() {
+    //   return this.$store.state.sum;
+    // },
+
     //! 下面這行mapState就會自動幫我們產出{ sum: f(){return this.$store.state.sum}}，key會指向computed屬姓名，後面字串會指向state裡的對應key。
     //! 因為回傳的是個obj，使用展開運算子散開。
     // ...mapState({ sum: "sum" }),
 
     //! 如果key名跟值都設定同名可用array寫法在簡寫
-    ...mapState("countCollection", ["sum"]),
-    ...mapState("personCollection", ["personList"]),
+    ...mapState(["sum"]),
 
-    ...mapGetters("countCollection", ["multiplySum"]),
+    ...mapGetters(["multiplySum"]),
   },
   methods: {
     //! 如果dispatch的任務沒有任何商業邏輯在，也就是說這任務可以直接commit給mutations的話就直接使用commit。
     //! 商業邏輯可都寫在actions
+    // increment() {
+    //   this.$store.commit("Increment", this.selectedNumber);
+    // },
+    // decrement() {
+    //   this.$store.commit("Decrement", this.selectedNumber);
+    // },
     //! 記得要在模板使用時帶入想給的參數，下面這寫法他只知道你method名與對應的key但不知道參數，而這時不給的話就會因為這函數是監聽事件的回調而參數自動變eventObj。
-    ...mapMutations("countCollection", {
-      increment: "Increment",
-      decrement: "Decrement",
-    }),
-    ...mapActions("countCollection", ["addWhenOdd", "addDelay"]),
+    ...mapMutations({ increment: "Increment", decrement: "Decrement" }),
+
+    // addWhenOdd() {
+    //   this.$store.dispatch("addWhenOdd", this.selectedNumber);
+    // },
+    // addDelay() {
+    //   this.$store.dispatch("addDelay", this.selectedNumber);
+    // },
+
+    ...mapActions(["addWhenOdd", "addDelay"]),
   },
   mounted() {
-    console.log(this.$store);
     console.log(mapState({ sum: "sum" }));
   },
 };

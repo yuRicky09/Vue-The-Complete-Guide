@@ -33,23 +33,18 @@ export default {
     // ...mapState({ sum: "sum" }),
 
     //! 如果key名跟值都設定同名可用array寫法在簡寫
-    ...mapState("countCollection", ["sum"]),
-    ...mapState("personCollection", ["personList"]),
+    ...mapState(["sum", "personList"]),
 
-    ...mapGetters("countCollection", ["multiplySum"]),
+    ...mapGetters(["multiplySum"]),
   },
   methods: {
     //! 如果dispatch的任務沒有任何商業邏輯在，也就是說這任務可以直接commit給mutations的話就直接使用commit。
     //! 商業邏輯可都寫在actions
     //! 記得要在模板使用時帶入想給的參數，下面這寫法他只知道你method名與對應的key但不知道參數，而這時不給的話就會因為這函數是監聽事件的回調而參數自動變eventObj。
-    ...mapMutations("countCollection", {
-      increment: "Increment",
-      decrement: "Decrement",
-    }),
-    ...mapActions("countCollection", ["addWhenOdd", "addDelay"]),
+    ...mapMutations({ increment: "Increment", decrement: "Decrement" }),
+    ...mapActions(["addWhenOdd", "addDelay"]),
   },
   mounted() {
-    console.log(this.$store);
     console.log(mapState({ sum: "sum" }));
   },
 };
