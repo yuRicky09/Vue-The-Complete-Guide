@@ -1,9 +1,6 @@
 import Vue from "vue";
 import App from "./App.vue";
-import VueRouter from "vue-router";
-import router from "./router";
-
-Vue.use(VueRouter);
+import store from "./store";
 
 Vue.config.productionTip = false;
 const vm = new Vue({
@@ -11,7 +8,7 @@ const vm = new Vue({
     App,
   },
 
-  router,
+  store,
 
   beforeCreate() {
     Vue.prototype.$bus = this;
