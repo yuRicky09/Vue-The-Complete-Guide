@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1 :style="{ opacity }">歡迎來到News</h1>
     <ul>
       <li>News01</li>
       <li>News02</li>
@@ -11,11 +10,6 @@
 <script>
 export default {
   name: "News",
-  data() {
-    return {
-      opacity: 1,
-    };
-  },
 };
 </script>
 <style></style>

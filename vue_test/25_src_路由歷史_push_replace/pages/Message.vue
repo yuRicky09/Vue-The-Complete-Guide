@@ -13,6 +13,12 @@
           }"
           >Message{{ index + 1 }}</router-link
         >
+        <button @click="pushMethodTo(message)">
+          已push歷史紀錄方式跳轉頁面
+        </button>
+        <button @click="replaceMethodTo(message)">
+          已replace歷史紀錄方式跳轉頁面
+        </button>
       </li>
     </ul>
     <div>
@@ -41,12 +47,26 @@ export default {
       ],
     };
   },
-  mounted() {
-    console.log("Message路由組件完成掛載");
-    console.log(this.$route);
-  },
-  beforeDestroy() {
-    console.log("Message路由組件將被銷毀");
+  methods: {
+    pushMethodTo(message) {
+      //! router才是掌管所有路由歷史紀錄的人，所以想找歷史紀錄相關的API請找router。
+      this.$router.push({
+        name: "messageItem",
+        params: {
+          id: message.id,
+          title: message.title,
+        },
+      });
+    },
+    replaceMethodTo(message) {
+      this.$router.replace({
+        name: "messageItem",
+        params: {
+          id: message.id,
+          title: message.title,
+        },
+      });
+    },
   },
 };
 </script>

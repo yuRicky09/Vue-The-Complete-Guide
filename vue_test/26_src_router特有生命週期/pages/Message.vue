@@ -43,7 +43,6 @@ export default {
   },
   mounted() {
     console.log("Message路由組件完成掛載");
-    console.log(this.$route);
   },
   beforeDestroy() {
     console.log("Message路由組件將被銷毀");

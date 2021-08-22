@@ -6,15 +6,19 @@
       <router-link to="/home/message">Message</router-link>
     </div>
     <div>
-      <keep-alive include="News">
-        <router-view class="box"></router-view>
-      </keep-alive>
+      <router-view class="box"></router-view>
     </div>
   </div>
 </template>
 <script>
 export default {
   name: "Home",
+  mounted() {
+    console.log("Home組件已被掛載完畢", this);
+  },
+  beforeDestroy() {
+    console.log("Home組件將要被銷毀");
+  },
 };
 </script>
 <style scoped>

@@ -5,28 +5,23 @@ import News from "../pages/News";
 import Message from "../pages/Message";
 import Detail from "../pages/Detail";
 
-const router = new VueRouter({
+export default new VueRouter({
   routes: [
     {
       path: "/about",
       component: About,
-      meta: { title: "About頁面" },
     },
     {
       path: "/home",
       component: Home,
-      meta: { title: "Home頁面" },
       children: [
         {
           path: "news",
           component: News,
-          //! 路由的meta屬性可以讓程序員自定義一些功能
-          meta: { needLogin: true, title: "News頁面" },
         },
         {
           path: "message",
           component: Message,
-          meta: { needLogin: true, title: "Message頁面" },
           children: [
             {
               // 當是高層級的路由組件時，可使用name屬性來跳轉，代替寫完整path路徑。
@@ -58,26 +53,3 @@ const router = new VueRouter({
     },
   ],
 });
-
-// 路由權限設置(路由守衛)
-//! 在1.初始化時 2.路由切換前觸發
-router.beforeEach((to, from, next) => {
-  if (to.meta.needLogin) {
-    if (localStorage.getItem("login") === "true") {
-      next();
-    } else {
-      alert("請先登入");
-    }
-  } else {
-    next();
-  }
-});
-
-// 路由切換後
-// 雖然使用上比較少，但還是能幫忙完成一些事情
-//! document.title能獲得現在頁面名
-router.afterEach((to) => {
-  document.title = to.meta.title;
-});
-
-export default router;
