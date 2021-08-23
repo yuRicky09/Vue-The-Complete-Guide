@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Test></Test>
     <Banner></Banner>
     <div class="container">
       <nav>
@@ -26,11 +27,13 @@
 
 <script>
 import Banner from "./components/Banner";
+import Test from "./components/Test";
 
 export default {
   name: "App",
   components: {
     Banner,
+    Test,
   },
 };
 </script>
