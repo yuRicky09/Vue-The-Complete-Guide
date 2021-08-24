@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue3響應式原理</title>
+  </head>
+  <body>
+    <script>
+      const person = {
+        name: "Yu",
+        age: 18,
+      };
+      // Proxy(target, handler)
+      const p = new Proxy(person, {
+        get(target, nameProp) {
+          // target = 源數據 nameProp = 讀取的屬性
+          return target[nameProp];
+        },
+        set(target, nameProp, value) {
+          console.log("我監測到有人更改了數據，我要去更新介面了!");
+          return (target[nameProp] = value);
+        },
+        deleteProperty(target, nameProp) {
+          console.log("我監測到有人刪了數據，我要去更新介面了");
+          return delete target[nameProp];
+        },
+      });
+    </script>
+  </body>
+</html>
