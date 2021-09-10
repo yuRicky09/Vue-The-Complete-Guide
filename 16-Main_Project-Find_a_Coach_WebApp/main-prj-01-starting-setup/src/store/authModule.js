@@ -16,7 +16,7 @@ export default {
     async authMode(context, data) {
       const fetchUrlMode =
         data.authMode === 'signup' ? 'signUp' : 'signInWithPassword';
-
+      console.log(process.env.VUE_APP_FIRE);
       const res = await fetch(
         `https://identitytoolkit.googleapis.com/v1/accounts:${fetchUrlMode}?key=${process.env.VUE_APP_FIRE}`,
         {
@@ -54,7 +54,7 @@ export default {
 
       timer = setTimeout(() => {
         context.dispatch('logout', 'isAutoLogout');
-      }, tokenExpirationTime);
+      }, resData.expiresIn * 1000);
 
       context.commit('setUser', {
         token: resData.idToken,
