@@ -7,27 +7,52 @@ export default {
   },
   actions: {
     async addRequest(context, data) {
-      await fetch(
-        'https://find-a-coach-cdacd-default-rtdb.firebaseio.com/requests.json',
+      const newRequest = {
+        email: data.email,
+        message: data.message
+      };
+
+      const res = await fetch(
+        `https://find-a-coach-cdacd-default-rtdb.firebaseio.com/requests/${data.coachId}.json`,
         {
           method: 'POST',
-          body: JSON.stringify(data)
+          body: JSON.stringify(newRequest)
         }
       );
-      context.commit('addRequest', data);
+
+      const resData = await res.json();
+
+      newRequest.id = resData.name;
+      newRequest.coachId = data.coachId;
+
+      context.commit('addRequest', newRequest);
     },
+
     async loadRequests(context) {
+      const coachId = context.rootGetters.userId;
+
+      //! 我們再firebase的rule設置了request需要有token才可看 token用法如下
+      const token = context.rootGetters.token;
       const res = await fetch(
-        'https://find-a-coach-cdacd-default-rtdb.firebaseio.com/requests.json'
+        `https://find-a-coach-cdacd-default-rtdb.firebaseio.com/requests/${coachId}.json?auth=${token}`
       );
+
       const data = await res.json();
       const requests = [];
 
+      if (!res.ok) {
+        const error = new Error(data.error || 'fail to fetch data');
+
+        //! 失敗就丟出error給外層的fn接(丟給呼叫dispatch的RequestList組件的loadRequestsList方法)
+        throw error;
+      }
+
       for (let req in data) {
+        console.log(data[req].message);
         const newRequest = {
-          coachId: data[req].coachId,
+          id: req,
+          coachId: coachId,
           email: data[req].email,
-          id: data[req].id,
           message: data[req].message
         };
         requests.push(newRequest);

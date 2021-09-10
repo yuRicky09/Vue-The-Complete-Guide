@@ -4,15 +4,44 @@
       <h1><router-link to="/">Find A Coach</router-link></h1>
       <ul>
         <li><router-link to="/coaches">All Coaches</router-link></li>
-        <li><router-link to="/requests">Requests</router-link></li>
+        <li v-if="isAuthenticated">
+          <router-link to="/requests">Requests</router-link>
+        </li>
+        <li v-if="isAuthenticated">
+          <base-button @click="logout">Logout</base-button>
+        </li>
+        <li v-else><router-link to="/auth">Login</router-link></li>
       </ul>
     </nav>
+    <base-dialog :fixed="true" :show="isLogouted" title="登出"
+      ><p>已順利登出，將跳轉回首頁</p></base-dialog
+    >
   </header>
 </template>
 
 <script>
 export default {
-  name: 'TheHeader'
+  name: 'TheHeader',
+  data() {
+    return {
+      isLogouted: false
+    };
+  },
+  computed: {
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('logout');
+      this.isLogouted = true;
+      setTimeout(() => {
+        this.isLogouted = false;
+        this.$router.push('/coaches');
+      }, 1500);
+    }
+  }
 };
 </script>
 
@@ -74,5 +103,9 @@ header ul {
 
 li {
   margin: 0 0.5rem;
+}
+
+a.logoout-style {
+  border: 0px;
 }
 </style>

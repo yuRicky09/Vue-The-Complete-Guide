@@ -14,6 +14,24 @@ export default {
   name: 'App',
   components: {
     TheHeader
+  },
+  computed: {
+    isAutoLogout() {
+      return this.$store.getters.isAutoLogout;
+    }
+  },
+  watch: {
+    isAutoLogout(newValue, oldValue) {
+      if (newValue && newValue !== oldValue) {
+        this.$router.replace('/coaches');
+      }
+    }
+  },
+  created() {
+    const authTokenData = JSON.parse(localStorage.getItem('token'));
+    if (authTokenData) {
+      this.$store.dispatch('autoLogin', authTokenData);
+    }
   }
 };
 </script>

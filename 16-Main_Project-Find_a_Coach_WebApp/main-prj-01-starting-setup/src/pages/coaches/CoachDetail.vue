@@ -1,12 +1,13 @@
 <template>
   <div>
-    <section>
+    <base-spinner v-if="isLoading"></base-spinner>
+    <section v-if="!isLoading">
       <base-card>
         <h2>{{ fullName }}</h2>
         <h3>${{ rate }}/hour</h3>
       </base-card>
     </section>
-    <section>
+    <section v-if="!isLoading">
       <base-card>
         <header>
           <h2>Interested? Reach out Now!</h2>
@@ -15,7 +16,7 @@
         <router-view></router-view>
       </base-card>
     </section>
-    <section>
+    <section v-if="!isLoading">
       <base-card>
         <base-badge
           v-for="area in areas"
@@ -35,7 +36,8 @@ export default {
   props: ['id'],
   data() {
     return {
-      selectedCoach: null
+      selectedCoach: {},
+      isLoading: false
     };
   },
   computed: {
@@ -55,10 +57,21 @@ export default {
       return this.selectedCoach.description;
     }
   },
+  methods: {
+    async loadAllCoach() {
+      this.isLoading = true;
+      await this.$store.dispatch('coach/loadCoachData', true);
+      this.matchSelectedCoach();
+      this.isLoading = false;
+    },
+    matchSelectedCoach() {
+      this.selectedCoach = this.$store.getters['coach/coaches'].find(
+        coach => coach.id === this.id
+      );
+    }
+  },
   created() {
-    this.selectedCoach = this.$store.getters['coach/coaches'].find(
-      coach => coach.id === this.id
-    );
+    this.loadAllCoach();
   }
 };
 </script>

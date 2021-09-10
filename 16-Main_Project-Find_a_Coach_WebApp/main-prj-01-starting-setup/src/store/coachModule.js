@@ -9,8 +9,10 @@ export default {
   actions: {
     async addCoachData(context, data) {
       const coachId = context.rootGetters.userId;
+
+      const token = context.rootGetters.token;
       const res = await fetch(
-        `https://find-a-coach-cdacd-default-rtdb.firebaseio.com/coaches/${coachId}.json`,
+        `https://find-a-coach-cdacd-default-rtdb.firebaseio.com/coaches/${coachId}.json?auth=${token}`,
         {
           method: 'PUT',
           body: JSON.stringify(data)
@@ -35,8 +37,6 @@ export default {
       const nowTime = new Date().getTime();
       const timePassMoreThanOneMin =
         (nowTime - context.state.lastFetchTimestamp) / 1000 > 60;
-
-      console.log(timePassMoreThanOneMin);
 
       //! 當已有時間戳(但表不是初始化)且上次reload距離這次不超過1分鐘
       if (

@@ -45,8 +45,9 @@ export default {
         this.errorMessage = null;
         this.isLoading = true;
         await this.$store.dispatch('request/loadRequests');
-      } catch (err) {
-        this.errorMessage = err.message;
+        //上面dispatch的非同步函數有錯誤時會丟出一個error物件，而這個error物件就能被下方的catch接到。
+      } catch (error) {
+        this.errorMessage = error.message;
       }
       this.isLoading = false;
     },

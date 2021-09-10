@@ -13,7 +13,16 @@
           <base-button mode="outline" @click="loadCoachList(true)"
             >Refresh</base-button
           >
-          <base-button isLink to="/register" v-if="!isCoach && !isLoading"
+          <base-button
+            v-if="!isAuthenticated"
+            isLink
+            :to="{ path: '/auth', query: { jumpToRegister: true } }"
+            >Login to Register as Coach</base-button
+          >
+          <base-button
+            isLink
+            to="/register"
+            v-if="isAuthenticated && !isCoach && !isLoading"
             >Register As A Coach</base-button
           >
         </div>
@@ -54,6 +63,9 @@ export default {
     };
   },
   computed: {
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
+    },
     ...mapGetters('coach', ['hasCoach', 'isCoach'])
     // coaches() {
     //   return this.$store.getters['coach/coaches'];
