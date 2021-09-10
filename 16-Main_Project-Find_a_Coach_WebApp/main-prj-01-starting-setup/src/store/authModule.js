@@ -18,7 +18,7 @@ export default {
         data.authMode === 'signup' ? 'signUp' : 'signInWithPassword';
 
       const res = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:${fetchUrlMode}?key=AIzaSyBEJnVRqnoYubz5zqNg_S3A8NJK_9bR77U`,
+        `https://identitytoolkit.googleapis.com/v1/accounts:${fetchUrlMode}?key=${process.env.VUE_APP_FIRE}`,
         {
           method: 'POST',
           body: JSON.stringify({
@@ -54,7 +54,7 @@ export default {
 
       timer = setTimeout(() => {
         context.dispatch('logout', 'isAutoLogout');
-      }, 15000);
+      }, tokenExpirationTime);
 
       context.commit('setUser', {
         token: resData.idToken,
@@ -80,13 +80,11 @@ export default {
         +authTokenData.tokenExpirationTime - new Date().getTime();
       console.log(tokenExpirationDiff);
       if (tokenExpirationDiff < 0) {
-        console.log('我要強制登出摟');
         context.dispatch('logout');
       } else {
         timer = setTimeout(() => {
           context.dispatch('logout', 'isAutoLogout');
         }, tokenExpirationDiff);
-        console.log('重新倒數中');
         context.commit('setUser', {
           token: authTokenData.token,
           userId: authTokenData.userId
