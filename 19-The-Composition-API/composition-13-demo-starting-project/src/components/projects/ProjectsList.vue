@@ -22,8 +22,9 @@
 
 <script>
 import ProjectItem from './ProjectItem.vue';
+import useSearch from '../../hooks/search';
 
-import { ref, computed, watch, toRefs } from 'vue';
+import { computed, watch, toRefs } from 'vue';
 
 export default {
   components: {
@@ -31,25 +32,34 @@ export default {
   },
   props: ['user'],
   setup(props) {
-    const enteredSearchTerm = ref('');
-    const activeSearchTerm = ref('');
+    // const enteredSearchTerm = ref('');
+    // const activeSearchTerm = ref('');
 
-    const hasProjects = computed(() => {
-      return props.user.projects && availableProjects.value.length > 0;
+    // const availableProjects = computed(() => {
+    //   if (activeSearchTerm.value) {
+    //     return props.user.projects.filter(prj =>
+    //       prj.title.includes(activeSearchTerm.value)
+    //     );
+    //   }
+    //   return props.user.projects;
+    // });
+
+    // const updateSearch = function(val) {
+    //   enteredSearchTerm.value = val;
+    // };
+    const { user } = toRefs(props);
+
+    //! 我們希望props的user一改變，就要拿到這個新user的projects，所以使用computed來幫我們達成 只要user一變就會執行
+    const projects = computed(() => {
+      return user.value ? user.value.projects : [];
     });
 
-    const availableProjects = computed(() => {
-      if (activeSearchTerm.value) {
-        return props.user.projects.filter(prj =>
-          prj.title.includes(activeSearchTerm.value)
-        );
-      }
-      return props.user.projects;
-    });
-
-    const updateSearch = function(val) {
-      enteredSearchTerm.value = val;
-    };
+    const {
+      enteredSearchTerm,
+      activeSearchTerm,
+      availableItems,
+      updateSearch
+    } = useSearch(projects, 'title');
 
     watch(enteredSearchTerm, newVal => {
       setTimeout(() => {
@@ -59,12 +69,15 @@ export default {
       }, 300);
     });
 
+    const hasProjects = computed(() => {
+      return props.user.projects && availableItems.value.length > 0;
+    });
+
     //! 這樣會監測失敗是因為這樣我們只是在watch一個純值， 而不是reactive數據。 整個props物件才是reactive數據。
     //! 但如果就是只想觀察props物件裡的某個屬性時可以依靠toRefs來幫忙
     // watch(props.user, ()=>{
     //   enteredSearchTerm.value = '';
     // })
-    const { user } = toRefs(props);
     watch(user, () => {
       enteredSearchTerm.value = '';
     });
@@ -73,10 +86,10 @@ export default {
       enteredSearchTerm,
       activeSearchTerm,
       hasProjects,
-      availableProjects,
+      availableProjects: availableItems,
       updateSearch
     };
-  },
+  }
   // data() {
   //   return {
   //     enteredSearchTerm: '',
@@ -101,18 +114,18 @@ export default {
   //     this.enteredSearchTerm = val;
   //   },
   // },
-  watch: {
-    enteredSearchTerm(val) {
-      setTimeout(() => {
-        if (val === this.enteredSearchTerm) {
-          this.activeSearchTerm = val;
-        }
-      }, 300);
-    },
-    user() {
-      this.enteredSearchTerm = '';
-    }
-  }
+  // watch: {
+  //   enteredSearchTerm(val) {
+  //     setTimeout(() => {
+  //       if (val === this.enteredSearchTerm) {
+  //         this.activeSearchTerm = val;
+  //       }
+  //     }, 300);
+  //   },
+  //   user() {
+  //     this.enteredSearchTerm = '';
+  //   }
+  // }
 };
 </script>
 

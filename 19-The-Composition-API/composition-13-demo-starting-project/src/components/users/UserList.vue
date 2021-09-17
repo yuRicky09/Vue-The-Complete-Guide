@@ -27,39 +27,32 @@
 
 <script>
 import UserItem from './UserItem.vue';
+import useSearch from '../../hooks/search.js';
 
-import { ref, computed } from 'vue';
+import { ref, computed, toRefs } from 'vue';
 export default {
   components: {
     UserItem
   },
   props: ['users'],
   setup(props) {
-    const enteredSearchTerm = ref('');
-    const activeSearchTerm = ref('');
+    const { users } = toRefs(props);
+
+    const {
+      enteredSearchTerm,
+      activeSearchTerm,
+      availableItems,
+      updateSearch
+    } = useSearch(users, 'fullName');
+
     const sorting = ref('');
-
-    //! computed計算屬性得到的return值 就是一個read only的ref object
-    const availableUsers = computed(() => {
-      let users = [];
-      if (activeSearchTerm.value) {
-        users = props.users.filter(user =>
-          user.fullName.includes(activeSearchTerm.value)
-        );
-      } else if (props.users) {
-        users = props.users;
-      }
-
-      return users;
-    });
-
     const displayedUsers = computed(() => {
       if (!sorting.value) {
-        return availableUsers.value;
+        return availableItems.value;
       }
 
       //! 用slice淺拷貝array
-      return availableUsers.value.slice().sort((u1, u2) => {
+      return availableItems.value.slice().sort((u1, u2) => {
         if (sorting.value === 'asc' && u1.fullName > u2.fullName) {
           return 1;
         } else if (sorting.value === 'asc') {
@@ -72,9 +65,6 @@ export default {
       });
     });
 
-    const updateSearch = function(val) {
-      enteredSearchTerm.value = val;
-    };
     const sort = function(mode) {
       sorting.value = mode;
     };
@@ -88,6 +78,37 @@ export default {
       sort
     };
   }
+
+  //! 初始配置(未使用hooks時)
+
+  // const enteredSearchTerm = ref('');
+  // const activeSearchTerm = ref('');
+
+  // //! computed計算屬性得到的return值 就是一個read only的ref object
+  // const availableUsers = computed(() => {
+  //   let users = [];
+  //   if (activeSearchTerm.value) {
+  //     users = props.users.filter(user =>
+  //       user.fullName.includes(activeSearchTerm.value)
+  //     );
+  //   } else if (props.users) {
+  //     users = props.users;
+  //   }
+
+  //   return users;
+  // });
+  // const updateSearch = function(val) {
+  //   enteredSearchTerm.value = val;
+  // };
+
+  // watch(enteredSearchTerm, newVal => {
+  //   setTimeout(() => {
+  //     if (newVal === enteredSearchTerm.value) {
+  //       activeSearchTerm.value = newVal;
+  //     }
+  //   }, 300);
+  // });
+
   // data() {
   //   return {
   //     enteredSearchTerm: '',
