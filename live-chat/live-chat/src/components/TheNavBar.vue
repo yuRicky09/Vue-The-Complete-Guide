@@ -1,8 +1,8 @@
 <template>
-  <nav>
+  <nav v-if="user">
     <div>
-      <p>Hey there...</p>
-      <p class="email">Currently logged in as...</p>
+      <p>用戶:{{ user.displayName }}</p>
+      <p class="email">帳戶信箱:{{ user.email }}</p>
     </div>
     <button @click="logoutUser">Logout</button>
   </nav>
@@ -11,12 +11,16 @@
 <script>
 import useLogout from "../hooks/useLogout";
 import { useRouter } from "vue-router";
+import getUser from "../hooks/getUser.js";
 
 export default {
   name: "TheNavBar",
   setup(props) {
     const { error, logout } = useLogout();
     const router = useRouter();
+
+    const { user } = getUser();
+
     const logoutUser = async function() {
       await logout();
       console.log("登出成功 將跳回首頁");
@@ -25,6 +29,7 @@ export default {
 
     return {
       logoutUser,
+      user,
     };
   },
 };
